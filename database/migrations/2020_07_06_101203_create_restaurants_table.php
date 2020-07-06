@@ -19,8 +19,8 @@ class CreateRestaurantsTable extends Migration
             $table->text('slug');
             $table->text('image');
             $table->longText('description');
-            $table->text('lat', 10, 7);
-            $table->text('lon', 10, 7);
+            $table->decimal('lat', 10, 8);
+            $table->decimal('lon', 11, 8);
             $table->timestamps();
         });
     }
