@@ -116,7 +116,7 @@ class RestaurantController extends Controller
          $validator = $request->validate([
             'restaurant_id' => ['required', 'exists:restaurants,id'],
             'name' => ['required', 'string'],
-            'banner' => ['required','mimes:jpeg,jpg,png,JPG,PNG','max:5120'],
+            'banner' => ['mimes:jpeg,jpg,png,JPG,PNG','max:5120'],
             'description' => ['required', 'string'],
             'lat' => ['required'],
             'lon' => ['required'],
@@ -129,9 +129,10 @@ class RestaurantController extends Controller
 
         //get slug for image
         $slug = Str::slug($request->name, '-');
-        $imagename = $slug . '.' . $photo->getClientOriginalExtension();
+       
         if($request->banner){
-        $restaurant->image = $imagename;
+            $imagename = $slug . '.' . $photo->getClientOriginalExtension();
+            $restaurant->image = $imagename;
         }
         //image name 
 

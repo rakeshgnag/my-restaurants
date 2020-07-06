@@ -23,11 +23,11 @@
       </nav>
 
       <div class="border p-4">
-        <form method="post" action="/restaurants.update"  enctype="multipart/form-data">
+        <form method="post" action="/restaurant.update"  enctype="multipart/form-data">
           @csrf
           @include('common.errors') 
 
-          <input type="hidden" name="id" value="{{$restaurant->id}}">
+          <input type="hidden" name="restaurant_id" value="{{$restaurant->id}}">
 
           <div class="form-group form-row" >
             <label for="name" class="col-sm-1">Name <span class="text-danger">*</span></label>
