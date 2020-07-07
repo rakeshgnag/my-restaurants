@@ -29,13 +29,18 @@
           </div>
 
           <div class="form-group form-row" >
+            <label for="autocomplete" class="col-sm-1">Address <span class="text-danger">*</span></label>
+            <input type="text" required class="form-control col-sm-8" id="autocomplete" name="autocomplete">
+          </div>
+
+          <div class="form-group form-row" >
             <label for="starts_at" class="col-sm-1">Latitude <span class="text-danger">*</span></label>
-            <input type="text" required class="form-control col-sm-8" name="lat" value="{{ old('lat') }}" required maxlength="10">
+            <input type="text" required class="form-control col-sm-8" id="latitude" name="lat" value="{{ old('lat') }}" required maxlength="10">
           </div>
 
           <div class="form-group form-row" >
             <label for="ends_at" class="col-sm-1">Longitude <span class="text-danger">*</span></label>
-            <input type="text" required class="form-control col-sm-8" name="lon" value="{{ old('lon') }}" required maxlength="10">
+            <input type="text" required class="form-control col-sm-8" id="longitude" name="lon" value="{{ old('lon') }}" required maxlength="10">
           </div>
 
           <div class="form-group">
@@ -50,6 +55,37 @@
     </div>
   </div>
 </div>
+@endsection
+@section('script')
+ <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="crossorigin="anonymous"></script>
+
+ <script src="https://maps.google.com/maps/api/js?key=AIzaSyDEVXKfRMEFhUAPbDInG9dTTvYlPpRCsg0&libraries=places&callback=initAutocomplete" type="text/javascript"></script>
+
+   <script>
+       $(document).ready(function() {
+            $("#lat_area").addClass("d-none");
+            $("#long_area").addClass("d-none");
+       });
+   </script>
+
+
+   <script>
+       google.maps.event.addDomListener(window, 'load', initialize);
+
+       function initialize() {
+           var input = document.getElementById('autocomplete');
+           var autocomplete = new google.maps.places.Autocomplete(input);
+           autocomplete.addListener('place_changed', function() {
+               var place = autocomplete.getPlace();
+               $('#latitude').val(place.geometry['location'].lat());
+               $('#longitude').val(place.geometry['location'].lng());
+
+            // --------- show lat and long ---------------
+               $("#lat_area").removeClass("d-none");
+               $("#long_area").removeClass("d-none");
+           });
+       }
+    </script>
 @endsection
 
 

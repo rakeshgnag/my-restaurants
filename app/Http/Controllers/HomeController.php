@@ -27,8 +27,11 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('home');
+    {   
+        $restaurants = Restaurant::get();
+        return view('home',[
+            'restaurants' => $restaurants
+        ]);
     }
 
 
@@ -39,14 +42,27 @@ class HomeController extends Controller
     public function search(Request $request)
     {
         $locations = Config::get('locations');
-        $latitude = $locations[$request->location]['lat'];
-        $longitude = $locations[$request->location]['lon'];
-
+        if($request->ajax){
+            $latitude = $request->lat;
+            $longitude = $request->lon;
+        }else{
+            $latitude = $locations[$request->location]['lat'];
+            $longitude = $locations[$request->location]['lon'];
+        }
+        
         //search restaurants within radius 4 kms
         $restaurants = Restaurant::select(DB::raw('*, ( 6367 * acos( cos( radians('.$latitude.') ) * cos( radians( lat ) ) * cos( radians( lon ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin( radians( lat ) ) ) ) AS distance'))
-            ->having('distance', '<', 4)
+            ->having('distance', '<', 5)
             ->orderBy('distance')
             ->get();
+
+        if($request->ajax){
+            return response()->json([
+                'ok' => true,
+                'restaurants' => $restaurants
+            ], 200);
+        }
+        
 
         if($restaurants->isEmpty()){
            return Redirect::back()->withErrors(['Sorry no restaurants found in your location']);
@@ -69,22 +85,16 @@ class HomeController extends Controller
             'restaurant_id' => ['required',  'exists:restaurants,id']
         ]);
         
-        $old_order = Order::where('user_id', $request->user_id)
-                     ->where('restaurant_id', $request->restaurant_id)
-                     ->first();
-        if(!$old_order){
-            $order = new Order();
-            $order->user_id = $request->user_id;
-            $order->restaurant_id = $request->restaurant_id;
-            $order->save();
-
-            $restaurant = Restaurant::find($request->restaurant_id);
-            return view('restaurants.success',[
-                'restaurant' => $restaurant,
-            ]);
-        }
-        return Redirect::back()->withErrors(['You have already paid for this restaurant']);
         
+        $order = new Order();
+        $order->user_id = $request->user_id;
+        $order->restaurant_id = $request->restaurant_id;
+        $order->save();
+
+        $restaurant = Restaurant::find($request->restaurant_id);
+        return view('restaurants.success',[
+            'restaurant' => $restaurant,
+        ]);        
 
     }
 

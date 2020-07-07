@@ -8,9 +8,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <style type="text/css">
+        #mymap {
+            border:1px solid red;
+            width: 700px;
+            height: 400px;
+        }
+    </style>
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" ></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -21,7 +27,15 @@
     <!-- Select2 Js-->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    @yield('script')
+
+    <script>
+
+    $(document).ready(function(){
+          $(".alert").delay(2000).slideUp(300);
+    });
+
+    </script>
+    
 </head>
 <body>
     <div id="app">
@@ -77,8 +91,14 @@
         </nav>
 
         <main class="py-4">
+            @if (session()->has('message'))
+                <div class="alert alert-info">
+                    {{ session('message') }}
+                </div>
+            @endif
             @yield('content')
         </main>
     </div>
+    @yield('script')
 </body>
 </html>

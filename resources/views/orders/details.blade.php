@@ -24,19 +24,22 @@
       
 
       <div class="border p-4">
+        <h3>User {{ $user->name }}</h3>
         <table class="table table-bordered">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">User Name</th>
+            <th scope="col">Order Id</th>
+            <th scope="col">Restaurant Name</th>
+            <th scope="col">Timings</th>
           </tr>
         </thead>
         <tbody>
 
-          @foreach($users as $user)
+          @foreach($orders as $order)
           <tr>
-            <th scope="row">{{$user->userId}}</th>
-            <td><a href="/order.details?user_id={{$user->userId}}"> {{ $user->name }}</a> </td>
+            <th scope="row">{{$order->id}}</th>
+            <td>{{ $restaurants[$order->restaurant_id]}}</td>
+            <td>{{ $order->created_at }}</td>
           </tr>
           @endforeach
          

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Restaurant;
 use App\Order;
 use App\User;
-
+use DB;
 
 class OrderController extends Controller
 {
@@ -32,20 +32,42 @@ class OrderController extends Controller
         $this->middleware('admin');
     }
 
-     /**
+    /**
      * List events
      *
      * @return \Illuminate\Contracts\Support\Renderable
     */
     public function list(Request $request)
     {   
-        $restaurants = Restaurant::pluck('name','id');
-        $users = User::pluck('name','id');
-        $orders = Order::get();
+
+        $users = DB::table('users')
+          ->select('users.id as userId', 'users.name as name')
+          ->join('orders', 'users.id', '=', 'orders.user_id')
+          ->distinct('userId')
+          ->get();
+
+        $users->groupBy('userId');
         return view('orders.list',[
-            'restaurants' => $restaurants,
             'users' => $users,
-            'orders' => $orders
+        ]);
+    }
+
+
+    /**
+     * List events
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+    */
+    public function  orderDetails(Request $request)
+    {   
+        $restaurants = Restaurant::pluck('name','id');
+        $user = User::find($request->user_id);
+        $orders = Order::get();
+       
+        return view('orders.details',[
+            'user' => $user,
+            'orders' => $orders,
+            'restaurants' => $restaurants
         ]);
     }
 
