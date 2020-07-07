@@ -76,6 +76,7 @@ class RestaurantController extends Controller
         $restaurant->description = $request->description;
         $restaurant->lat = $request->lat;
         $restaurant->lon = $request->lon;
+        $restaurant->address = $request->address;
         $restaurant->save();
 
         $image = \Image::make($photo);

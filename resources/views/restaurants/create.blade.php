@@ -59,7 +59,7 @@
 @section('script')
  <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="crossorigin="anonymous"></script>
 
- <script src="https://maps.google.com/maps/api/js?key=AIzaSyDEVXKfRMEFhUAPbDInG9dTTvYlPpRCsg0&libraries=places&callback=initAutocomplete" type="text/javascript"></script>
+ <script src="https://maps.google.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&libraries=places&callback=initAutocomplete" type="text/javascript"></script>
 
    <script>
        $(document).ready(function() {

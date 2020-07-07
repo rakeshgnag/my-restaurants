@@ -42,6 +42,7 @@
                     </form>
                     <br />
                     <input type="hidden" id="app_url" name="app_url" value="{{env('APP_URL')}}">
+                    
                     <div id="mymap"></div>
                 </div>
             </div>
@@ -51,7 +52,7 @@
 @endsection
 @section('script')
 <!-- Maps dependencies -->
-<script src="https://maps.google.com/maps/api/js?key=AIzaSyDEVXKfRMEFhUAPbDInG9dTTvYlPpRCsg0&libraries=places" type="text/javascript"></script>
+<script src="https://maps.google.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&libraries=places" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.js"></script>
 
 <script type="text/javascript">
@@ -109,7 +110,7 @@
           window.setTimeout(function() {
                var latitude = mymap.getCenter().lat();
                var longitude = mymap.getCenter().lng();
-               
+
                mymap.removeMarkers();
                $.ajax({
                   url: '/restaurants.search',
